@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 263) #more horizontal space original 476
+        MainWindow.resize(800, 300) #more horizontal space original 476
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
         self.downloadButton.setObjectName("downloadButton")
 
         self.animeView = QtWidgets.QListWidget(self.centralwidget)
-        self.animeView.setGeometry(QtCore.QRect(10, 50, 321, 201))
+        self.animeView.setGeometry(QtCore.QRect(10, 50, 321, 236))
         self.animeView.setObjectName("animeView")
 
         self.searchField = QtWidgets.QLineEdit(self.centralwidget)
@@ -71,7 +71,7 @@ class Ui_MainWindow(object):
 
         # NEW STUFF
         self.savedView = QtWidgets.QListWidget(self.centralwidget)
-        self.savedView.setGeometry(QtCore.QRect(480, 10, 310, 240)) #10, 50, 321, 31
+        self.savedView.setGeometry(QtCore.QRect(480, 10, 310, 275))
         self.savedView.setObjectName("savedView")
 
         self.save = QtWidgets.QPushButton(self.centralwidget)
@@ -81,6 +81,10 @@ class Ui_MainWindow(object):
         self.unsave = QtWidgets.QPushButton(self.centralwidget)
         self.unsave.setGeometry(QtCore.QRect(405, 153, 65, 31))
         self.unsave.setObjectName("unsave")
+
+        self.autoDownload = QtWidgets.QPushButton(self.centralwidget)
+        self.autoDownload.setGeometry(QtCore.QRect(340, 255, 131, 31))
+        self.autoDownload.setObjectName("autoDownload")
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -99,4 +103,5 @@ class Ui_MainWindow(object):
         # NEW STUFF
         self.save.setText(QtWidgets.QApplication.translate("MainWindow", "Save", None, -1))
         self.unsave.setText(QtWidgets.QApplication.translate("MainWindow", "Unsave", None, -1))
+        self.autoDownload.setText(QtWidgets.QApplication.translate("MainWindow", "Auto-Download", None, -1))
 

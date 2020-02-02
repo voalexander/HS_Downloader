@@ -2,6 +2,7 @@ import re
 import time
 import asyncio
 import aiohttp
+import json
 import os, sys, subprocess, threading
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
@@ -165,6 +166,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.unsave.clicked.connect(self.unsave_anime)
         self.animeView.clicked.connect(self.select_anime)
         self.savedView.clicked.connect(self.select_saved)
+
+        self.jsonToSaved()
     
     def eventFilter(self, widget, event):
         if event.type() == QEvent.KeyPress and widget is self.searchField:
@@ -253,12 +256,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if(SELECTED_SHOW_SAVED is None):
             return
         self.savedView.takeItem(self.savedView.row(self.savedView.selectedItems()[0]))
+        self.savedToJson()
 
     def save_anime(self):
         global SELECTED_SHOW
         if(SELECTED_SHOW is None):
             return
         self.savedView.addItem(SELECTED_SHOW)
+        self.savedToJson()
+    
+    def savedToJson(self):
+        data = {}
+        data["Saved_Shows"] = []
+        for index in range(self.savedView.count()):
+            data["Saved_Shows"].append({
+                "title": self.savedView.item(index).title,
+                "link": str(self.savedView.item(index).show_link)
+            })
+        with open("saved.json", "w") as outfile:
+            json.dump(data, outfile, indent=4)
+
+    def jsonToSaved(self):
+        with open("saved.json") as json_file:
+            data = json.load(json_file)
+            for anime in data["Saved_Shows"]:
+                self.savedView.addItem(AnimeShow(anime["link"], anime["title"]))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
