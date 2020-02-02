@@ -47,8 +47,11 @@ class AnimeShow(QListWidgetItem):
         self.show_link = show_link
         self.title = title
 
-    def setText(self):
+    def getTitle(self):
         return self.title
+
+    def getLink(self):
+        return self.show_link
 
     def __str__(self):
         return '{} - {}'.format(self.title, self.show_link)
@@ -160,6 +163,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selectAll.clicked.connect(self.select_all)
         self.deselectAll.clicked.connect(self.deselect_all)
         self.intellTurn.stateChanged.connect(self.intellTurn_changed)
+
+        self.save.clicked.connect(self.save_anime)
+        self.animeView.clicked.connect(self.select_anime)
     
     def eventFilter(self, widget, event):
         if event.type() == QEvent.KeyPress and widget is self.searchField:
@@ -231,6 +237,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         global INTELL_PARSE
         INTELL_PARSE = not INTELL_PARSE
 
+    def select_anime(self):
+        global SELECTED_SHOW
+        selected_item = self.animeView.selectedItems()[0]
+        SELECTED_SHOW = AnimeShow(selected_item.show_link, selected_item.title)
+        print(SELECTED_SHOW)
+
+    def save_anime(self):
+        global SELECTED_SHOW
+        if(SELECTED_SHOW is None):
+            return
+        self.savedAnime.addItem(SELECTED_SHOW)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
