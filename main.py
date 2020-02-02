@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 
 from MainWindow import Ui_MainWindow
 
+
 ROOT_URL = 'http://horriblesubs.info'
 ALL_SHOWS = ROOT_URL + '/shows/'
 API_URL = ROOT_URL + '/api.php?method=getshows&type=show&showid={}&nextid={}'
