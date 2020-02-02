@@ -23,6 +23,9 @@ QUALITIES = ['1080', '720', '480']
 SELECTED_SHOW = None
 INTELL_PARSE = False
 
+# NEW STUFF
+SELECTED_SHOW_SAVED = None
+
 def open_magnet(magnet):
     """Open magnet according to os."""
     if sys.platform.startswith('linux'):
@@ -46,12 +49,6 @@ class AnimeShow(QListWidgetItem):
         super().__init__(title)
         self.show_link = show_link
         self.title = title
-
-    def getTitle(self):
-        return self.title
-
-    def getLink(self):
-        return self.show_link
 
     def __str__(self):
         return '{} - {}'.format(self.title, self.show_link)
@@ -165,7 +162,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.intellTurn.stateChanged.connect(self.intellTurn_changed)
 
         self.save.clicked.connect(self.save_anime)
+        self.unsave.clicked.connect(self.unsave_anime)
         self.animeView.clicked.connect(self.select_anime)
+        self.savedView.clicked.connect(self.select_saved)
     
     def eventFilter(self, widget, event):
         if event.type() == QEvent.KeyPress and widget is self.searchField:
@@ -237,17 +236,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         global INTELL_PARSE
         INTELL_PARSE = not INTELL_PARSE
 
+    # NEW STUFF
+
     def select_anime(self):
         global SELECTED_SHOW
         selected_item = self.animeView.selectedItems()[0]
         SELECTED_SHOW = AnimeShow(selected_item.show_link, selected_item.title)
-        print(SELECTED_SHOW)
+
+    def select_saved(self):
+        global SELECTED_SHOW_SAVED
+        selected_item = self.savedView.selectedItems()[0]
+        SELECTED_SHOW_SAVED = AnimeShow(selected_item.show_link, selected_item.title)
+    
+    def unsave_anime(self):
+        global SELECTED_SHOW_SAVED
+        if(SELECTED_SHOW_SAVED is None):
+            return
+        self.savedView.takeItem(self.savedView.row(self.savedView.selectedItems()[0]))
 
     def save_anime(self):
         global SELECTED_SHOW
         if(SELECTED_SHOW is None):
             return
-        self.savedAnime.addItem(SELECTED_SHOW)
+        self.savedView.addItem(SELECTED_SHOW)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

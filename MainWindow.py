@@ -70,13 +70,17 @@ class Ui_MainWindow(object):
         self.intellTurn.setObjectName("intellTurn")
 
         # NEW STUFF
-        self.savedAnime = QtWidgets.QListWidget(self.centralwidget)
-        self.savedAnime.setGeometry(QtCore.QRect(480, 10, 310, 240)) #10, 50, 321, 31
-        self.savedAnime.setObjectName("savedAnime")
+        self.savedView = QtWidgets.QListWidget(self.centralwidget)
+        self.savedView.setGeometry(QtCore.QRect(480, 10, 310, 240)) #10, 50, 321, 31
+        self.savedView.setObjectName("savedView")
 
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(340, 153, 131, 31))
+        self.save.setGeometry(QtCore.QRect(340, 153, 65, 31))
         self.save.setObjectName("save")
+
+        self.unsave = QtWidgets.QPushButton(self.centralwidget)
+        self.unsave.setGeometry(QtCore.QRect(405, 153, 65, 31))
+        self.unsave.setObjectName("unsave")
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -94,4 +98,5 @@ class Ui_MainWindow(object):
 
         # NEW STUFF
         self.save.setText(QtWidgets.QApplication.translate("MainWindow", "Save", None, -1))
+        self.unsave.setText(QtWidgets.QApplication.translate("MainWindow", "Unsave", None, -1))
 
