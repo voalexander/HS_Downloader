@@ -1,12 +1,24 @@
 {
     "Saved_Shows": [
         {
-            "title": "Mahou Shoujo Ikusei Keikaku",
-            "link": "<a href=\"/shows/mahou-shoujo-ikusei-keikaku\" title=\"Mahou Shoujo Ikusei Keikaku\">Mahou Shoujo Ikusei Keikaku</a>"
+            "link": "<a href=\"/shows/aho-girl\" title=\"Aho Girl\">Aho Girl</a>",
+            "title": "Aho Girl"
         },
         {
-            "title": "Aho Girl",
-            "link": "<a href=\"/shows/aho-girl\" title=\"Aho Girl\">Aho Girl</a>"
+            "link": "<a href=\"/shows/mahou-shoujo-ikusei-keikaku\" title=\"Mahou Shoujo Ikusei Keikaku\">Mahou Shoujo Ikusei Keikaku</a>",
+            "title": "Mahou Shoujo Ikusei Keikaku"
+        },
+        {
+            "link": "<a href=\"/shows/sword-art-online-extra-edition\" title=\"Sword Art Online EXTRA EDITION\">Sword Art Online EXTRA EDITION</a>",
+            "title": "Sword Art Online EXTRA EDITION"
+        },
+        {
+            "link": "<a href=\"/shows/sword-art-online-ii\" title=\"Sword Art Online II\">Sword Art Online II</a>",
+            "title": "Sword Art Online II"
+        },
+        {
+            "link": "<a href=\"/shows/rikei-ga-koi-ni-ochita-no-de-shoumei-shitemita\" title=\"Rikei ga Koi ni Ochita no de Shoumei shitemita\">Rikei ga Koi ni Ochita no de Shoumei shitemita</a>",
+            "title": "Rikei ga Koi ni Ochita no de Shoumei shitemita"
         }
     ]
 }

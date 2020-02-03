@@ -4,6 +4,7 @@ import asyncio
 import aiohttp
 import json
 import os, sys, subprocess, threading
+from os import path
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
@@ -247,7 +248,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def select_anime(self):
         global SELECTED_SHOW
         selected_item = self.animeView.selectedItems()[0]
-        SELECTED_SHOW = AnimeShow(selected_item.show_link, selected_item.title)
+        SELECTED_SHOW = AnimeShow(selected_item.show_link, selected_item.title) #selecting episodes probs
 
     def select_saved(self):
         global SELECTED_SHOW_SAVED
@@ -269,18 +270,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.savedToJson()
 
     def download_saved(self):
-        selected_quality = self.selectQuality.currentText()
-        downloaded = []
-        for index in range(self.savedView.count()):
-            episodes = get_episodes(self.savedView.item(index).show_link, selected_quality)
-            self.saveDownloadHist(self.savedView.item(index).title, episodes)
-            #print(data["Downloaded"]["Aho Girl"])
-
-    def saveDownloadHist(self, title, episodes):
         global DOWNLOAD_HISTORY
-        DOWNLOAD_HISTORY["Downloaded"].append({
-            title: tuple([str(i) for i in episodes])
-        })
+        selected_quality = self.selectQuality.currentText()
+        toDownload = []
+        allEps = [[],[]]
+        for index in range(self.savedView.count()):
+            link = self.savedView.item(index).show_link
+            allEps[0].append(self.savedView.item(index).title)
+            allEps[1].append(get_episodes(link, selected_quality))
+        toDownload = self.checkDownloaded(allEps)
+        self.saveDownloadHist(allEps)
+        
+        self.downloadView.clear()
+        if len(toDownload) is 0:
+            self.downloadView.addItem("No new updates!")
+        for episode in toDownload:
+            self.downloadView.addItem(episode.title)
+            print(episode)
+            #open_magnet(episode.magnet)
+        DOWNLOAD_HISTORY = {}
+        DOWNLOAD_HISTORY["Downloaded"] = []
+
+            
+    def checkDownloaded(self, allEps):
+        toDownload = []
+        if path.exists("download_history.json"):
+            with open("download_history.json", 'r', encoding='utf-8', errors='ignore') as json_file:
+                data = json.load(json_file)
+                for title in allEps[0]: #search for all titles
+                    added = False
+                    for x in range(len(data["Downloaded"])): #throughout all of the found data
+                        if data["Downloaded"][x].get(title, "None") != "None":
+                            for eps in allEps[1][allEps[0].index(title)]:
+                                if str(eps) not in [str(z) for z in data["Downloaded"][x].get(title)]:
+                                    toDownload.append(eps)
+                            break
+                        elif (x is (len(data["Downloaded"]) - 1) and added is False):
+                            added = True
+                            for eps in allEps[1][allEps[0].index(title)]:
+                                toDownload.append(eps)
+        return toDownload
+
+    def saveDownloadHist(self, allEps):
+        global DOWNLOAD_HISTORY
+        for i in range(len(allEps[0])):
+            DOWNLOAD_HISTORY["Downloaded"].append({
+                allEps[0][i]: tuple([str(i) for i in allEps[1][i]])
+            })
         with open("download_history.json", "w") as outfile:
             json.dump(DOWNLOAD_HISTORY, outfile, indent=4, sort_keys=True)
 

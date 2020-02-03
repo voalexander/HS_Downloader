@@ -1,0 +1,5 @@
+                for i in range(len(data["Downloaded"])):
+                    for x in data["Downloaded"][i][title]:
+                        for episode in episodes:
+                            if str(episode) == str(x):
+                                toDownload.remove(episode)

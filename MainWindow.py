@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 300) #more horizontal space original 476
+        MainWindow.resize(1060, 300) #more horizontal space original 476
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -73,6 +73,10 @@ class Ui_MainWindow(object):
         self.savedView = QtWidgets.QListWidget(self.centralwidget)
         self.savedView.setGeometry(QtCore.QRect(480, 10, 310, 275))
         self.savedView.setObjectName("savedView")
+
+        self.downloadView = QtWidgets.QListWidget(self.centralwidget)
+        self.downloadView.setGeometry(QtCore.QRect(800, 10, 250, 275))
+        self.downloadView.setObjectName("downloadView")
 
         self.save = QtWidgets.QPushButton(self.centralwidget)
         self.save.setGeometry(QtCore.QRect(340, 153, 65, 31))
