@@ -26,6 +26,8 @@ INTELL_PARSE = False
 
 # NEW STUFF
 SELECTED_SHOW_SAVED = None
+DOWNLOAD_HISTORY = {}
+DOWNLOAD_HISTORY["Downloaded"] = []
 
 def open_magnet(magnet):
     """Open magnet according to os."""
@@ -102,7 +104,7 @@ async def fetch_links(show, show_id, next_iter, quality):
 
 
 def get_episodes(show, quality='1080'):
-    
+
     html = requests.get(ROOT_URL + show['href']).text
     soup = BeautifulSoup(html, 'lxml')
     main_div = soup.find('div', class_='entry-content')
@@ -166,6 +168,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.unsave.clicked.connect(self.unsave_anime)
         self.animeView.clicked.connect(self.select_anime)
         self.savedView.clicked.connect(self.select_saved)
+        self.autoDownload.clicked.connect(self.download_saved)
 
         self.jsonToSaved()
     
@@ -264,7 +267,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         self.savedView.addItem(SELECTED_SHOW)
         self.savedToJson()
-    
+
+    def download_saved(self):
+        selected_quality = self.selectQuality.currentText()
+        downloaded = []
+        for index in range(self.savedView.count()):
+            episodes = get_episodes(self.savedView.item(index).show_link, selected_quality)
+            self.saveDownloadHist(self.savedView.item(index).title, episodes)
+            #print(data["Downloaded"]["Aho Girl"])
+
+    def saveDownloadHist(self, title, episodes):
+        global DOWNLOAD_HISTORY
+        DOWNLOAD_HISTORY["Downloaded"].append({
+            title: tuple([str(i) for i in episodes])
+        })
+        with open("download_history.json", "w") as outfile:
+            json.dump(DOWNLOAD_HISTORY, outfile, indent=4, sort_keys=True)
+
     def savedToJson(self):
         data = {}
         data["Saved_Shows"] = []
@@ -274,13 +293,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "link": str(self.savedView.item(index).show_link)
             })
         with open("saved.json", "w") as outfile:
-            json.dump(data, outfile, indent=4)
+            json.dump(data, outfile, indent=4, sort_keys=True)
 
     def jsonToSaved(self):
         with open("saved.json") as json_file:
             data = json.load(json_file)
             for anime in data["Saved_Shows"]:
-                self.savedView.addItem(AnimeShow(anime["link"], anime["title"]))
+                link = BeautifulSoup(anime["link"],"lxml").a
+                self.savedView.addItem(AnimeShow(link, anime["title"]))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
