@@ -287,7 +287,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for episode in toDownload:
             self.downloadView.addItem(episode.title)
             print(episode)
-            #open_magnet(episode.magnet)
+            open_magnet(episode.magnet)
         DOWNLOAD_HISTORY = {}
         DOWNLOAD_HISTORY["Downloaded"] = []
 
@@ -332,11 +332,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             json.dump(data, outfile, indent=4, sort_keys=True)
 
     def jsonToSaved(self):
-        with open("saved.json") as json_file:
-            data = json.load(json_file)
-            for anime in data["Saved_Shows"]:
-                link = BeautifulSoup(anime["link"],"lxml").a
-                self.savedView.addItem(AnimeShow(link, anime["title"]))
+        if path.exists("saved.json"):
+            with open("saved.json") as json_file:
+                data = json.load(json_file)
+                for anime in data["Saved_Shows"]:
+                    link = BeautifulSoup(anime["link"],"lxml").a
+                    self.savedView.addItem(AnimeShow(link, anime["title"]))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
